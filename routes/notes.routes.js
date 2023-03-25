@@ -3,13 +3,20 @@ const notesRouter = express.Router();
 const { notesModel } = require("../models/notes.model");
 
 notesRouter.get("/", async (req, res) => {
-  try {
-    const notes = await notesModel.find();
-    res.status(200).send(notes);
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
-  }
-});
+  const token=req.headers.authorization
+  const decode=jwt.verify(token,process.env.secret_code)
+  
+    try {
+      if(decode){
+        const notes = await notesModel.find({"userID":decode.userID});
+        res.status(200).send(notes);
+      }
+     
+    } catch (error) {
+      res.status(400).send({ msg: error.message });
+    }
+  });
+  
 notesRouter.post("/add", async (req, res) => {
   try {
     const notes = new notesModel(req.body);
