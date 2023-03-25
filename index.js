@@ -9,11 +9,14 @@ const cors=require("cors")
 const app=express()
 app.use(cors())
 app.use(express.json())
+
+
 app.get("/",(req,res)=>{
     res.send({"msg":"This is my Homepage"})
 })
 
 app.use("/user",userRouter)
+
 app.use(auth)
 
 app.use("/notes",notesRouter)

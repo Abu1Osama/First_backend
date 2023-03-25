@@ -1,22 +1,26 @@
 const express = require("express");
 const notesRouter = express.Router();
 const { notesModel } = require("../models/notes.model");
+const jwt=require("jsonwebtoken")
+require("dotenv").config
 
-notesRouter.get("/all", async (req, res) => {
-  const token=req.headers.authorization
-  const decode=jwt.verify(token,process.env.secret_code)
-  
-    try {
-      if(decode){
-        const notes = await notesModel.find({"userID":decode.userID});
-        res.status(200).send(notes);
-      }
-     
-    } catch (error) {
-      res.status(400).send({ msg: error.message });
+notesRouter.get("/", async (req, res) => {
+const token=req.headers.authorization
+const decode=jwt.verify(token,process.env.secret_code)
+
+  try {
+    if(decode){
+      const notes = await notesModel.find({"userID":decode.userID});
+      res.status(200).send(notes);
     }
-  });
-  
+   
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
+
+
 notesRouter.post("/add", async (req, res) => {
   try {
     const notes = new notesModel(req.body);
