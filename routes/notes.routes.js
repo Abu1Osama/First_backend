@@ -2,7 +2,7 @@ const express = require("express");
 const notesRouter = express.Router();
 const { notesModel } = require("../models/notes.model");
 
-notesRouter.get("/", async (req, res) => {
+notesRouter.get("/all", async (req, res) => {
   const token=req.headers.authorization
   const decode=jwt.verify(token,process.env.secret_code)
   
